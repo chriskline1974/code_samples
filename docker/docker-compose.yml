@@ -1,0 +1,142 @@
+version: '3.7'
+
+networks:
+  dev-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 169.34.0.0/16
+
+services:
+  kma:
+    container_name: kma-httpd-server
+    hostname: kma-httpd-server
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    tty: true
+    volumes:
+      - ../../klinesmartialarts.com/:/var/www/html/
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - 180:80
+      - 1443:443
+    networks:
+      dev-net:
+        ipv4_address: 169.34.1.1
+
+  cek:
+    container_name: cek-httpd-server
+    hostname: cek-httpd-server
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    tty: true
+    volumes:
+      - ../../chriskline.net/:/var/www/html/
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - 280:80
+      - 2443:443
+    networks:
+      dev-net:
+        ipv4_address: 169.34.1.2
+
+  txw:
+    container_name: txw-httpd-server
+    hostname: txw-httpd-server
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    tty: true
+    volumes:
+      - ../../techxweb.com/:/var/www/html/
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - 380:80
+      - 3443:443
+    networks:
+      dev-net:
+        ipv4_address: 169.34.1.3
+
+  mnm:
+    container_name: mnm-httpd-server
+    hostname: mnm-httpd-server
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    tty: true
+    volumes:
+      - ../../mnm/:/var/www/html/
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - 480:80
+      - 4443:443
+    networks:
+      dev-net:
+        ipv4_address: 169.34.1.4
+
+  mjb:
+    container_name: mjb-httpd-server
+    hostname: mjb-httpd-server
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    tty: true
+    volumes:
+      - ../../mjb/:/var/www/html/
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - 580:80
+      - 5443:443
+    networks:
+      dev-net:
+        ipv4_address: 169.34.1.5
+
+  pct:
+    container_name: pct-httpd-server
+    hostname: pct-httpd-server
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    tty: true
+    volumes:
+      - ../../pawsitive/:/var/www/html/
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - 680:80
+      - 6443:443
+    networks:
+      dev-net:
+        ipv4_address: 169.34.1.6
+
+  tkm:
+    container_name: tkm-httpd-server
+    hostname: tkm-httpd-server
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    tty: true
+    volumes:
+      - ../../toky/:/var/www/html/
+    expose:
+      - "80"
+      - "443"
+    ports:
+      - 780:80
+      - 7443:443
+    networks:
+      dev-net:
+        ipv4_address: 169.34.1.7

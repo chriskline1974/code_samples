@@ -1,0 +1,10 @@
+FROM centos/httpd
+LABEL maintainer="Christopher Kline (christopher.e.kline4.ctr@mail.mil)"
+
+# Install needed apache modules
+RUN yum -y update \
+    && yum install -y mod_ssl \
+    && yum install -y php php-mysql
+
+# fix conf file
+# RUN sed -i 's&#ServerName :80&ServerName 169.34.1.1:80&g' /etc/httpd/conf/httpd.conf
