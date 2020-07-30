@@ -21,27 +21,6 @@ usage()
     "
 }
 
-checkForSetup() {
-  echo
-  echo 'Checking for setup....'
-
-  return 1
-}
-
-setup()
-{
-  echo
-  echo 'Running httpd Setup ...'
-
-  # cleanup old directories
-  cleanup
-}
-
-cleanup()
-{
-  echo 'Running Httpd Cleanup ...'
-}
-
 checkStatus()
 {
   # echo "** Return status from ${2} script was ${1}"
@@ -55,47 +34,95 @@ checkStatus()
 
 start()
 {
-  echo 'Running Httpd Start ...'
+  echo 'Running Start ...'
   stop
   buildFlag=${1}
 
-  checkForSetup
-  setupStatus=$?
-  #echo "setup status is ${setupStatus}"
-  if [ $setupStatus == 2 ]; then
-    # if not setup run setup
-    echo "Setup not run doing it now"
-    setup
-    buildFlag="--build"
-  fi
-
-  echo "Starting ...."
   # run docker container
-  echo "  sudo docker-compose -f ${dockerCompose} up ${buildFlag} ${2} --remove-orphans kma"
-  sudo docker-compose -f ${dockerCompose} up ${buildFlag} ${2} --remove-orphans kma
+  echo "  sudo docker-compose -f ${dockerCompose} up ${buildFlag} ${2} --remove-orphans ${site}"
+  sudo docker-compose -f ${dockerCompose} up ${buildFlag} ${2} --remove-orphans ${site}
   scriptStatus=$?
   checkStatus $scriptStatus "docker-compose"
+
+  echo "Call open Browswer"
+  openBrowser
 }
 
 stop()
 {
     echo "Stopping ...."
-    echo "  sudo docker-compose -f ${dockerCompose} stop kma"
-    sudo docker-compose -f ${dockerCompose} stop kma
+    echo "  sudo docker-compose -f ${dockerCompose} stop ${site}"
+    sudo docker-compose -f ${dockerCompose} stop $site
 }
 
 connect()
 {
-  echo 'Connection to KMA httpd container ...'
+  echo "Connection to ${1} container ..."
   sudo docker exec -it ${1} bash
 }
 
 log()
 {
-  echo 'Displaying logs for httpd container ...'
-  sudo docker-compose -f ${dockerCompose} logs -t kma
+  echo "Displaying logs for ${site} container ..."
+  sudo docker-compose -f ${dockerCompose} logs -t $site
 }
 
+openBrowser()
+{
+  dir=`pwd`
+  url="file://${dir}/index.html"
+  echo "Opening Browser to ${url}"
+  open ${url}
+}
+
+setWebSite()
+{
+  echo '1. Klines martial Arts'
+  echo '2. Chris Kline'
+  echo '3. Tech X Web'
+  echo '4. Manners N More'
+  echo '5. Marty Jo'
+  echo '6. Pawsitive Connections Training'
+  echo '7. Toky Maille'
+  echo ''
+  echo 'Please enter a number to connect to that server > '
+  read conChoice
+  ser=""
+  case $conChoice in
+    1 )
+      server="kma-httpd-server"
+      site="kma"
+      ;;
+    2 )
+      server="cek-httpd-server"
+      site="cek"
+      ;;
+    3 )
+      server="txw-httpd-server"
+      site="txw"
+      ;;
+    4 )
+      server="mnm-httpd-server"
+      site="mnm"
+      ;;
+    5 )
+      server="mjb-httpd-server"
+      site="mjb"
+      ;;
+    6 )
+      server="pct-httpd-server"
+      site="pct"
+      ;;
+    7 )
+      server="tkm-httpd-server"
+      site="tkm"
+      ;;
+    * )
+      echo "Please enter a valid number"
+      exit 1
+  esac
+  echo "Server set to - ${site}"   
+}
 
 # Check for arguments if non supplied, display usage
 if [ "$1" == "" ]; then
@@ -108,7 +135,8 @@ fi
 detached="-d"
 build=""
 dockerCompose="./docker-compose.yml"
-lb=""
+site=""
+server=""
 
 # Parse options to the command
 while getopts ":bcd:h" opt; do
@@ -143,34 +171,28 @@ shift $((OPTIND -1))
 
 subcommand=$1; shift  # Remove 'pip' from the argument list
 case "$subcommand" in
-  cleanup )
-    # echo "Got a cleanup command";
-    shift
-    cleanup
-    ;;
   connect )
     # echo "Got a connect command";
     shift
-    connect kma-httpd-server
+    setWebSite
+    connect $server
     ;;
   log )
     # echo "Got a log command";
     shift
+    setWebSite
     log
-    ;;
-  setup )
-    # echo "Got a setup command";
-    shift  # Remove 'setup' from the argument list
-    setup
     ;;
   start )
     # echo "Got a start command";
     shift
+    setWebSite
     start "$build" "$detached"
     ;;
   stop )
     # echo "Got a stop command";
     shift
+    setWebSite
     stop
     ;;
   * )

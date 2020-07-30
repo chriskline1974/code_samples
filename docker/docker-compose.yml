@@ -92,7 +92,7 @@ services:
       dockerfile: Dockerfile.http
     tty: true
     volumes:
-      - ../../mjb/:/var/www/html/
+      - ../../martyjo/:/var/www/html/
     expose:
       - "80"
       - "443"
@@ -130,7 +130,7 @@ services:
       dockerfile: Dockerfile.http
     tty: true
     volumes:
-      - ../../toky/:/var/www/html/
+      - ../../tokymaille/:/var/www/html/
     expose:
       - "80"
       - "443"
