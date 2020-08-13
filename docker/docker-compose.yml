@@ -73,7 +73,7 @@ services:
       dockerfile: Dockerfile.http
     tty: true
     volumes:
-      - ../../mnm/:/var/www/html/
+      - ../../mnm/public_html:/var/www/html/
     expose:
       - "80"
       - "443"
